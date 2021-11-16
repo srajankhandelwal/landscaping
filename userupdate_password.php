@@ -11,22 +11,27 @@ $query = mysqli_query($db, $sql);
 $row = mysqli_fetch_assoc($query);
 ?>
 <?php
-$var1 = $_SESSION['GardenerID'];
-if (isset($_REQUEST['submit'])) {
-  $name = $_REQUEST['name'];
-  $gender = $_REQUEST['gender'];
-  $dob = $_REQUEST['dob'];
-  $contactno = $_REQUEST['contactno'];
-  $address = $_REQUEST['address'];
-  $doj = $_REQUEST['doj'];
 
-    $query    = "Update `gardener` SET Name = '$name', gender = '$gender', Address='$address',contactno = '$contactno', dob='$dob', doj = '$doj' WHERE GardenerID='$var1'";
+$wrong = 0;
+if (isset($_REQUEST['submit'])) {
+  $curr_pass = $_REQUEST['curr_pass'];
+  $new_pass = $_REQUEST['new_pass'];
+  if($row['password'] === md5($curr_pass)) {
+    $hash_new_pass = md5($new_pass);
+    $query    = "Update `gardener` SET password = '$hash_new_pass' WHERE GardenerID='$var1'";
     $result = mysqli_query($db, $query);
     $rows = mysqli_fetch_assoc($result);
-    echo '<script type = "text/javascript">';
-    echo 'alert("Changes Updated!");';
-    echo 'window.location.href = "userprofile.php"';
-    echo '</script>';
+
+      echo '<script type = "text/javascript">';
+      echo 'alert("Password Updated!");';
+      echo 'window.location.href = "userprofile.php"';
+      echo '</script>';
+  }
+  else{
+      $wrong = 1;
+  }
+
+
 
 
 }
@@ -44,7 +49,7 @@ if (isset($_REQUEST['submit'])) {
 		<div class="main-body">
       <nav aria-label="breadcrumb" class="main-breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="">Update Profile</a></li>
+          <li class="breadcrumb-item"><a href="">Update Password</a></li>
           <a href = "userprofile.php" class="ml-auto"> Back </a>
         </ol>
       </nav>
@@ -73,53 +78,26 @@ if (isset($_REQUEST['submit'])) {
               <form>
 							<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Full Name</h6>
+									<h6 class="mb-0">Existing Password</h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
-									<input type="text" name="name" class="form-control" value="<?php echo trim($row['Name']);?>">
+									<input type="text" name="curr_pass" class="form-control" value="" placeholder="Enter your current password">
 								</div>
 							</div>
-							<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Gender</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="text" name="gender" class="form-control" value="<?php echo $row['gender'];?>">
-								</div>
-							</div>
-              <div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Address</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="text" name="address" class="form-control" value="<?php echo $row['Address'];?>">
-								</div>
-							</div>
-							<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Phone</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="text" name="contactno"  class="form-control" value="<?php echo $row['contactno'];?> ">
-								</div>
-							</div>
-							<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Date Of Birth</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="date" name="dob" class="form-control" value=<?php echo $row['DoB'];?>>
-								</div>
-							</div>
-              <div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Date Of Joining</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="date" name="doj" class="form-control" value=<?php echo $row['DoJ'];?>>
-								</div>
-							</div>
+              <?php
+                  if($wrong){
+                      echo "<p style='color:red'>wrong password or username</p>";
+                  }
 
+              ?>
+							<div class="row mb-3">
+								<div class="col-sm-3">
+									<h6 class="mb-0">New Password</h6>
+								</div>
+								<div class="col-sm-9 text-secondary">
+									<input type="text" name="new_pass" class="form-control" value="" placeholder="Enter New Password">
+								</div>
+							</div>
 							<div class="row">
 								<div class="col-sm-3"></div>
 								<div class="col-sm-9 text-secondary">
