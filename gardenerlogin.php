@@ -1,15 +1,17 @@
 <?php
     require_once('db.php');
+              session_start();
     $wrong = 0;
     if(isset($_POST['username'])) {
         $username = $_POST['username'];
         $password = $_POST['password'];
-        $sql = "SELECT * FROM admin WHERE username = '$username'";
+        $sql = "SELECT * FROM gardener WHERE username = '$username'";
         $result = mysqli_query($db, $sql);
         $row = mysqli_fetch_assoc($result);
-        if($row['password'] === $password) {
+        if($row['password'] === md5($password)) {
             $_SESSION['username'] = $username;
-            header("Location: adminhome.php" );
+            $_SESSION['GardenerID'] = $row['GardenerID'];
+            header("Location: userprofile.php");
         }
         else{
             $wrong = 1;
@@ -29,23 +31,23 @@
 </head>
 <body>
     <div class="container">
-        <form action = "adminlogin.php" method = "post">
+        <form action = "gardenerlogin.php" method = "post">
         <div   class = "mb-3">
-            <label for = "username" class = "form-label">Email address</label>
+            <label for = "username" class = "form-label">Username</label>
             <input type = "text" name="username" class = "form-control"  placeholder = "username">
         </div>
         <div class = "mb-3">
             <label for = "exampleFormControlTextarea1" class = "form-label">Password</label>
             <input type = "password" name="password" class = "form-control"  placeholder = "********">
         </div>
-        <?php 
+        <?php
             if($wrong){
                 echo "<p style='color:red'>wrong password or username</p>";
-            } 
-        
+            }
+
         ?>
         <div class="col-auto">
-            <button type="submit" name="adminLogin" class="btn btn-primary mb-3">Confirm identity</button>
+            <button type="submit" name="gardenerlogin" class="btn btn-primary mb-3">Confirm identity</button>
         </div>
         </form>
 
