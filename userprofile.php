@@ -6,30 +6,9 @@ if(!isset($_SESSION['GardenerID'])) {
 }
 require('db.php');
 $var1 = $_SESSION['GardenerID'];
-$sql = "SELECT * from `gardener` where gardenerid= '$var1'" ;
+$sql = "SELECT * from `gardener` where gardenerid= 1" ;
 $query = mysqli_query($db, $sql);
 $row = mysqli_fetch_assoc($query);
-?>
-<?php
-$var1 = $_SESSION['GardenerID'];
-if (isset($_REQUEST['submit'])) {
-  $name = $_REQUEST['name'];
-  $gender = $_REQUEST['gender'];
-  $dob = $_REQUEST['dob'];
-  $contactno = $_REQUEST['contactno'];
-  $address = $_REQUEST['address'];
-  $doj = $_REQUEST['doj'];
-
-    $query    = "Update `gardener` SET Name = '$name', gender = '$gender', Address='$address',contactno = '$contactno', dob='$dob', doj = '$doj' WHERE GardenerID='$var1'";
-    $result = mysqli_query($db, $query);
-    $rows = mysqli_fetch_assoc($result);
-    echo '<script type = "text/javascript">';
-    echo 'alert("Changes Updated!");';
-    echo 'window.location.href = "userprofile.php"';
-    echo '</script>';
-
-
-}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -41,98 +20,151 @@ if (isset($_REQUEST['submit'])) {
   </head>
   <body>
     <div class="container">
-		<div class="main-body">
-      <nav aria-label="breadcrumb" class="main-breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="">Update Profile</a></li>
-          <a href = "userprofile.php" class="ml-auto"> Back </a>
-        </ol>
-      </nav>
-			<div class="row">
-				<div class="col-lg-4">
-					<div class="card">
-						<div class="card-body">
-							<div class="d-flex flex-column align-items-center text-center">
-                <?php if($row['gender']=='M'): ?>
-                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
-              <?php else: ?>
-              <img src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="Admin" class="rounded-circle" width="150">
-            <?php endif; ?>
-                <div class="mt-3">
-                  <h4><?php echo $row['username']; ?></h4>
-                  <p class="text-secondary mb-1">Gardener ID</p>
-                  <p class="text-muted font-size-sm"><?php echo $row['GardenerID']; ?></p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-8">
-					<div class="card">
-						<div class="card-body">
-              <form>
-							<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Full Name</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="text" name="name" class="form-control" value="<?php echo trim($row['Name']);?>">
-								</div>
-							</div>
-							<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Gender</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="text" name="gender" class="form-control" value="<?php echo $row['gender'];?>">
-								</div>
-							</div>
-              <div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Address</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="text" name="address" class="form-control" value="<?php echo $row['Address'];?>">
-								</div>
-							</div>
-							<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Phone</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="text" name="contactno"  class="form-control" value="<?php echo $row['contactno'];?> ">
-								</div>
-							</div>
-							<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Date Of Birth</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="date" name="dob" class="form-control" value=<?php echo $row['DoB'];?>>
-								</div>
-							</div>
-              <div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Date Of Joining</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="date" name="doj" class="form-control" value=<?php echo $row['DoJ'];?>>
-								</div>
-							</div>
+    <div class="main-body">
 
-							<div class="row">
-								<div class="col-sm-3"></div>
-								<div class="col-sm-9 text-secondary">
-									<input type="submit" name="submit" class="btn btn-primary px-4" value="Save Changes">
-								</div>
-							</div>
-            </form>
-						</div>
-					</div>
+          <!-- Breadcrumb -->
+          <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="">User profile</a></li>
+              <a href = "logout.php" class="ml-auto"> Logout </a>
+            </ol>
 
-				</div>
-			</div>
-		</div>
-	</div>
+          </nav>
+          <!-- /Breadcrumb -->
+
+          <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+              <div class="card h">
+                <div class="card-body">
+                  <div class="d-flex flex-column align-items-center text-center">
+                    <?php if($row['gender']=="M"){ ?>
+                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
+                  <?php }else{ ?>
+                  <img src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="Admin" class="rounded-circle" width="150">
+                <?php } ?>
+                    <div class="mt-3">
+                      <h4><?php echo $row['username']; ?></h4>
+                      <p class="text-secondary mb-1">Gardener ID</p>
+                      <p class="text-muted font-size-sm"><?php echo $row['GardenerID']; ?></p>
+                      <!-- <button class="btn btn-primary">Follow</button>
+                      <button class="btn btn-outline-primary">Message</button> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-8">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Full Name</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <?php echo $row['Name']; ?>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Gender</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <?php echo $row['gender']; ?>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Address</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <?php echo $row['Address']; ?>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Phone</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <?php echo $row['contactno']; ?>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Date of Birth</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <?php echo $row['DoB']; ?>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Date of Joining</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <?php echo $row['DoJ']; ?>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Current area of work</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <?php echo $row['workingarea']; ?>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <a class="btn btn-info " href="userupdate_profile.php">Update</a>
+                    </div>
+                    <div class="col-sm-6">
+                      <a class="btn btn-info "href="userupdate_password.php">Change Password</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row gutters-sm">
+                <div class="col-sm-6 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h6 class="d-flex align-items-center mb-3">My Attendance</h6>
+
+                      <div class="progress mb-3" style="height: 5px">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h6 class="d-flex align-items-center mb-3"> My Performance</h6>
+
+                      <div class="progress mb-3" style="height: 5px">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
+
+        </div>
+    </div>
   </body>
 </html>
+v
