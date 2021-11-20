@@ -163,18 +163,65 @@ $row = mysqli_fetch_assoc($query);
                   <div class="card h-100">
                     <div class="card-body">
                       <h6 class="d-flex align-items-center mb-3"> My Performance</h6>
-
                       <div class="progress mb-3" style="height: 5px">
                         <div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
-
                     </div>
                   </div>
                 </div> -->
               </div>
 
+              <h3>Request Equipment Repair</h3>
+               <div>
+               <table id = "users">
+        <tr>
+            <th>Equipment-ID</th>
+        </tr>
+        <tr>
+            <td>
+                <form action ="userprofile.php" method ="POST">
+                    <input type= "text" name="equipmentid" placeholder="Enter Equipment ID"/>
+                    <input type = "submit" name  ="request" value = "Request"/>
+                </form>
+            </td> 
+        </tr>
+        
+      <?php
+              
+              ?>
+    </table>
+    <table>
+      <tr>
+        <th>Request-ID</th>
+        <th>Equipment-ID</th>
+        <th>Status</th>
+      </tr>
+      <?php
+      $sql2 = "SELECT * from `equipmentrequest` where gardenerid = '$var1' order by status ASC" ;
+      $result2= mysqli_query($db, $sql2);
+      if(mysqli_num_rows($result2)==0){
+        ?>
+        <tr>
+        <td>No Request Made</td>
+        <td>Relax!</td>
+        <td>Relax!</td>
+      </tr>
+      <?php } else {
+      while($row2 = mysqli_fetch_assoc($result2)){
+        ?>
+        <tr>
+        <td><?php echo $row2['erid'] ?></td>
+        <td><?php echo $row2['equipmentid'] ?></td>
+        <td><?php if($row2['status']==0) echo 'Request Pending';
+        else if($row2['status']==1) echo 'Approved! Work in Progress';
+        else if($row2['status']==2) echo 'Declined';
+        else if($row2['status']==3) echo 'Repaired';
+        ?></td>
+      </tr>
+      <?php }} ?>
+    </table>
 
-
+               </div>
             </div>
           </div>
 
@@ -194,6 +241,33 @@ if(isset($_POST['completed'])){
     echo 'alert("User Approved!");';
     echo 'window.location.href = "userprofile.php"';
     echo '</script>';
+}
+
+?>
+
+<?php
+
+if(isset($_POST['request'])){
+    $allot_equipmentid = $_POST['equipmentid'];
+    $allot_check="SELECT * from equipmentrequest WHERE equipmentid=$allot_equipmentid and (status=0 or status=1)";
+    $check_result= mysqli_query($db, $allot_check);
+    $num_rows=mysqli_num_rows($check_result);
+    if($num_rows){
+      echo '<script type = "text/javascript">';
+      echo 'alert("Request already exsits!");';
+      echo 'window.location.href = "userprofile.php"';
+      echo '</script>';
+    }
+    else{
+    $allot_select = "INSERT into equipmentrequest(equipmentid,gardenerid) values ('$allot_equipmentid','$var1') ";
+    $allot_result = mysqli_query($db, $allot_select);
+    
+
+    echo '<script type = "text/javascript">';
+    echo 'alert("Request Generated!");';
+    echo 'window.location.href = "userprofile.php"';
+    echo '</script>';
+    }
 }
 
 ?>
