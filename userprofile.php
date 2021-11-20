@@ -6,7 +6,7 @@ if(!isset($_SESSION['GardenerID'])) {
 }
 require('db.php');
 $var1 = $_SESSION['GardenerID'];
-$sql = "SELECT * from `gardener` where gardenerid= 1" ;
+$sql = "SELECT * from `gardener` where gardenerid= '$var1'" ;
 $query = mysqli_query($db, $sql);
 $row = mysqli_fetch_assoc($query);
 ?>
@@ -130,21 +130,36 @@ $row = mysqli_fetch_assoc($query);
                   </div>
                 </div>
               </div>
-
+              <h3>My Requests</h3>
               <div class="row gutters-sm">
-                <div class="col-sm-6 mb-3">
-                  <div class="card h-100">
-                    <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3">My Attendance</h6>
 
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                <?php
+                $sql1 = "SELECT * from `request` where gardenerid = '$var1' and status = 0" ;
+                $result1 = mysqli_query($db, $sql1);
+                if(mysqli_num_rows($result1)==0){
+                  ?>
+                  <div class="col-sm-4 mb-3">
+                  <h6>Hurray ! ALL Requests completed.</h6>
+                </div>
+                <?php } else {
+                while($row1 = mysqli_fetch_assoc($result1)){
+                  ?>
+                  <div class="col-sm-4 mb-3">
+                    <div class="card h-100">
+                      <div class="card-body">
+                        <h6 class="d-flex align-items-center mb-3"><?php echo $row1['areaname'];?></h6>
+                        <form action ="userprofile.php" method ="POST">
+                        <input type = "hidden" name  ="srid" value = "<?php echo $row1['srid'];?>"/>
+                        <input type = "submit" name  ="completed" value = "Completed"/>
+                      </form>
                       </div>
-
                     </div>
                   </div>
-                </div>
-                <div class="col-sm-6 mb-3">
+                  <?php
+                }}
+                ?>
+
+                <!-- <div class="col-sm-6 mb-3">
                   <div class="card h-100">
                     <div class="card-body">
                       <h6 class="d-flex align-items-center mb-3"> My Performance</h6>
@@ -155,7 +170,7 @@ $row = mysqli_fetch_assoc($query);
 
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
 
 
@@ -167,4 +182,18 @@ $row = mysqli_fetch_assoc($query);
     </div>
   </body>
 </html>
-v
+<?php
+
+if(isset($_POST['completed'])){
+    $srid = $_POST['srid'];
+
+    $upd = "UPDATE request SET status = 1 WHERE srid = '$srid'";
+    $upd_result = mysqli_query($db, $upd);
+
+    echo '<script type = "text/javascript">';
+    echo 'alert("User Approved!");';
+    echo 'window.location.href = "userprofile.php"';
+    echo '</script>';
+}
+
+?>
