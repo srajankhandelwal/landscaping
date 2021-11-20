@@ -2,18 +2,18 @@
     require_once('db.php');
     $wrong = 0;
     if(isset($_POST['date'])) {
-        $gid = $_POST['gid'];
+        $GardenerID = $_POST['GardenerID'];
         $area = $_POST['area'];
         $date = $_POST['date'];
         $table = "roster";
 
-        echo "<br/> $gid $area $date <br/>";
+        echo "<br/> $GardenerID $area $date <br/>";
 
         $sql = "SELECT * FROM information_schema.tables where table_schema = 'TheSchema' and table_name = '$table'";
         $result = mysqli_query($db, $sql);
         if($result->num_rows == 0){
             echo "\n creating table \n";
-            $sql = "create table {$table} (date date,area varchar(20),gid int)";
+            $sql = "create table {$table} (date date,area varchar(20),GardenerID int)";
             $result = mysqli_query($db, $sql);
             echo mysqli_error($db);
         }
@@ -27,16 +27,17 @@
         if($cnt === 0) {
             echo $cnt;
             echo "row inserted <br\>";
-            $sql = "insert into {$table}(date,area,gid) values ('$date','$area','$gid')";
+            $sql = "insert into {$table}(date,area,GardenerID) values ('$date','$area','$GardenerID')";
             $result = mysqli_query($db, $sql);
             echo " status : $result <br/>";
         }
         else{
             echo $cnt;
             echo "row updated <br\>";
-            $sql = "update {$table} set gid = '$gid' where date = '$date' and area = '$area'";;
+            $sql = "update {$table} set GardenerID = {$GardenerID} where date = '$date' and area = {$area}";
             $result = mysqli_query($db, $sql);
-            echo " status : $result <br/>";
+            echo $sql;
+            echo " status : {$result} <br/>";
         }
     }
 
