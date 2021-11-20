@@ -24,7 +24,7 @@
 
 <form action = "rosterupdateserver.php" method="post">
 
-// date area gid
+// date area GardenerID
 <div class="mb-3">
         <label for="Name" class="form-label">
                 Date
@@ -41,9 +41,9 @@
 
 <div class="mb-3">
         <label for="address" class="form-label">
-                Gid
+                GardenerID
         </label>
-        <input type="number" name = "gid" class="form-control" required>
+        <input type="number" name = "GardenerID" class="form-control" required>
 </div>
 
 
