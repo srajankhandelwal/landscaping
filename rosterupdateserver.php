@@ -5,7 +5,7 @@
         $gid = $_POST['gid'];
         $area = $_POST['area'];
         $date = $_POST['date'];
-        $table = "roster_".date("m_y");
+        $table = "roster";
 
         echo "<br/> $gid $area $date <br/>";
 
